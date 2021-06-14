@@ -55,7 +55,7 @@ return (new PhpCsFixer\Config())
         'multiline_whitespace_before_semicolons' => true,
         'native_constant_invocation' => true, // risky
         'native_function_casing' => true,
-        'native_function_invocation' => ['scope' => 'namespaced', 'strict' => true], // risky
+        'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced', 'strict' => true], // risky
         'new_with_braces' => true,
         'no_alternative_syntax' => true,
         'no_binary_string' => true,
