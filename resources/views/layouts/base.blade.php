@@ -11,6 +11,7 @@
     <body itemscope itemtype="http://schema.org/WebPage">
         @stack('body-top')
         <main>
+            @include('flash::message')
             @yield('content')
         </main>
         <script src="{{ mix('assets/js/app.js') }}" type="text/javascript"></script>

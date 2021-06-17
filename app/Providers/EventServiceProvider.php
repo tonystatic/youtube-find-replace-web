@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use SocialiteProviders\Manager\SocialiteWasCalled;
-use SocialiteProviders\YouTube\YouTubeExtendSocialite;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -16,9 +14,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        SocialiteWasCalled::class => [
-            YouTubeExtendSocialite::class,
-        ],
+        //
     ];
 
     /**

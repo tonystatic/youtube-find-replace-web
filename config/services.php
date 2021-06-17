@@ -22,11 +22,12 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
     ],
 
-    'youtube' => [
-        'client_id'     => env('YOUTUBE_CLIENT_ID'),
-        'client_secret' => env('YOUTUBE_CLIENT_SECRET'),
-        'redirect'      => env('YOUTUBE_REDIRECT_URI', '/auth/callback'),
+    'google' => [
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect'      => env('GOOGLE_REDIRECT_URI', '/auth/callback'),
         'scopes'        => [
+            'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/youtube.force-ssl',
         ],
     ],
