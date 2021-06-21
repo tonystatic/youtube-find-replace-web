@@ -12,14 +12,15 @@ class CreateChannelsTable extends Migration
     {
         Schema::create('channels', function (Blueprint $table) : void {
             $table->id();
-            $table->foreignId('owner_id')
-                ->constrained('users')
-                ->onDelete('cascade');
 
             $table->string('external_id', 24)->unique();
             $table->string('title');
             $table->string('avatar')->nullable();
 
+            $table->string('access_token')->nullable();
+            $table->string('refresh_token')->nullable();
+
+            $table->rememberToken();
             $table->timestamps();
         });
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Features\Youtube\GoogleClient\GoogleClientYoutubeAuth;
-use App\Features\Youtube\YoutubeAuth;
+use App\Features\Api\GoogleApi\GoogleApiYoutube;
+use App\Features\Api\Youtube;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register() : void
     {
-        $this->app->bind(YoutubeAuth::class, GoogleClientYoutubeAuth::class);
+        $this->app->bind(Youtube::class, GoogleApiYoutube::class);
     }
 
     /**

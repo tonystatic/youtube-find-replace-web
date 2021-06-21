@@ -40,7 +40,7 @@ return [
     'guards' => [
         'web' => [
             'driver'   => 'session',
-            'provider' => 'users',
+            'provider' => 'channels',
         ],
 
         // 'api' => [
@@ -68,9 +68,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'channels' => [
             'driver' => 'eloquent',
-            'model'  => App\Models\User::class,
+            'model'  => App\Models\Channel::class,
         ],
 
         // 'users' => [

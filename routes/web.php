@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ReplaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +13,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, 'main'])->name('main');
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::get('redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
-    Route::get('callback', [AuthController::class, 'callback'])->name('auth.callback');
+Route::group(['middleware' => 'guest'], function () {
+
+    Route::group(['prefix' => 'auth'], function () {
+
+        Route::get('redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
+        Route::get('callback', [AuthController::class, 'callback'])->name('auth.callback');
+    });
+});
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('home', [MainController::class, 'home'])->name('home');
+
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::group(['prefix' => 'replace'], function () {
+
+        Route::get('/', [ReplaceController::class, 'index'])->name('replace');
+    });
 });
