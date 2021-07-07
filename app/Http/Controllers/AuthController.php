@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Features\Youtube\Auth;
-use App\Features\Youtube\Channel;
 use App\Features\Youtube\Support\AuthException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,11 +16,16 @@ class AuthController extends Controller
         return redirect()->to($auth->getAuthUrl());
     }
 
-    public function callback(Request $request, Auth $auth, Channel $channel) : RedirectResponse
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Features\Youtube\Auth $auth
+     * @throws \App\Features\Youtube\Support\AuthExpiredException
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function callback(Request $request, Auth $auth) : RedirectResponse
     {
         try {
-            $accessToken = $auth->authenticate($request->all());
-            $channel = $channel->createOrUpdate($accessToken);
+            $channel = $auth->authenticate($request->all());
         } catch (AuthException $e) {
             flash()->error($e->getMessage());
 

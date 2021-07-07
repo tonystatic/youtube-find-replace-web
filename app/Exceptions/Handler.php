@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Features\Youtube\Support\AuthExpiredException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -34,8 +34,11 @@ class Handler extends ExceptionHandler
      */
     public function register() : void
     {
-        $this->reportable(function (Throwable $e) : void {
-            //
-        });
+        $this->reportable(function (AuthExpiredException $e) {
+            auth()->logout();
+            flash()->warning($e->getMessage());
+
+            return redirect()->route('main');
+        })->stop();
     }
 }

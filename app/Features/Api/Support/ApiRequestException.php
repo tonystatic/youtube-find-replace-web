@@ -7,10 +7,10 @@ namespace App\Features\Api\Support;
 use App\Features\FeatureException;
 use Throwable;
 
-class YoutubeAuthException extends FeatureException
+class ApiRequestException extends FeatureException
 {
     public function __construct(Throwable $previous = null)
     {
-        parent::__construct($previous, 'YouTube authentication failed.');
+        parent::__construct($previous, 'YouTube API request failed.');
     }
 }

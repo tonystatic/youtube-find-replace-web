@@ -16,6 +16,6 @@ class MainController extends Controller
 
     public function home() : RedirectResponse
     {
-        return redirect()->route('replace');
+        return redirect()->route('findReplace');
     }
 }

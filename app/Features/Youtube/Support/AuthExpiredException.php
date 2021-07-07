@@ -7,10 +7,10 @@ namespace App\Features\Youtube\Support;
 use App\Features\FeatureException;
 use Throwable;
 
-class AuthException extends FeatureException
+class AuthExpiredException extends FeatureException
 {
     public function __construct(Throwable $previous = null)
     {
-        parent::__construct($previous, 'Authentication failed. Please, try again.');
+        parent::__construct($previous, 'Authentication expired. Please, log in again.');
     }
 }
