@@ -17,8 +17,6 @@ class Videos extends Youtube
     const SEARCH_IN_DESCRIPTIONS = 'descriptions';
 
     /**
-     * @param \App\Models\Channel $channel
-     * @param string $search
      * @param array|string[] $in
      * @throws \App\Features\Youtube\Support\AuthExpiredException
      * @throws \App\Features\Youtube\Support\RequestException

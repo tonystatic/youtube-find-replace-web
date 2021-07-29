@@ -17,10 +17,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Features\Youtube\Auth $auth
      * @throws \App\Features\Youtube\Support\AuthExpiredException
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function callback(Request $request, Auth $auth) : RedirectResponse
     {

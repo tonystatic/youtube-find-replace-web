@@ -19,10 +19,8 @@ class Auth extends Youtube
     }
 
     /**
-     * @param array $queryParams
      * @throws \App\Features\Youtube\Support\AuthException
      * @throws \App\Features\Youtube\Support\AuthExpiredException
-     * @return \App\Models\Channel
      */
     public function authenticate(array $queryParams) : Channel
     {

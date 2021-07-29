@@ -21,8 +21,6 @@ class FindReplaceController extends Controller
     }
 
     /**
-     * @param SearchRequest $request
-     * @param Videos $videos
      * @throws \App\Features\Youtube\Support\AuthExpiredException
      */
     public function search(SearchRequest $request, Videos $videos)

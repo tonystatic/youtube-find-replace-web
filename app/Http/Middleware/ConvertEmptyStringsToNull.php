@@ -21,8 +21,6 @@ class ConvertEmptyStringsToNull extends Middleware
      * Transform the given value.
      *
      * @param string $key
-     * @param mixed $value
-     * @return mixed
      */
     protected function transform($key, $value)
     {

@@ -28,7 +28,6 @@ abstract class GoogleApi
     }
 
     /**
-     * @param \App\Features\Api\Support\Tokens $tokens
      * @throws \App\Features\Api\Support\ApiAuthExpiredException
      */
     protected function setTokensAndRefreshIfNeeded(Tokens &$tokens) : void
