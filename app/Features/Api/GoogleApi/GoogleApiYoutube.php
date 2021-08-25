@@ -12,6 +12,7 @@ use App\Features\Api\Support\VideoItem;
 use App\Features\Api\Support\VideoItems;
 use App\Features\Api\Youtube;
 use Exception;
+use Google_Service_YouTube;
 
 class GoogleApiYoutube extends GoogleApi implements Youtube
 {
@@ -43,7 +44,7 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
     {
         $this->setTokensAndRefreshIfNeeded($tokens);
 
-        $youtubeService = new \Google_Service_YouTube($this->client);
+        $youtubeService = new Google_Service_YouTube($this->client);
         try {
             $response = $youtubeService->channels->listChannels('snippet,contentDetails', ['mine' => true]);
             $channelInfo = $response->getItems()[0];
@@ -68,7 +69,7 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
     {
         $this->setTokensAndRefreshIfNeeded($tokens);
 
-        $youtubeService = new \Google_Service_YouTube($this->client);
+        $youtubeService = new Google_Service_YouTube($this->client);
         $videos = new VideoItems();
         $nextPageToken = null;
         try {
@@ -86,6 +87,45 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
                     $videos->add(
                         new VideoItem(
                             $videoSnippet->getResourceId()->getVideoId(),
+                            $videoSnippet->getTitle(),
+                            $videoSnippet->getDescription(),
+                            $videoSnippet->getThumbnails()
+                                ->getMedium()
+                                ->getUrl()
+                        )
+                    );
+                }
+                $nextPageToken = $response->getNextPageToken();
+            } while ($nextPageToken !== null);
+        } catch (Exception $e) {
+            throw new ApiRequestException($e);
+        }
+
+        return $videos;
+    }
+
+    public function getVideosByIds(Tokens &$tokens, array $ids) : VideoItems
+    {
+        $this->setTokensAndRefreshIfNeeded($tokens);
+
+        $youtubeService = new Google_Service_YouTube($this->client);
+        $videos = new VideoItems();
+        $nextPageToken = null;
+        try {
+            do {
+                $response = $youtubeService->videos->listVideos(
+                    'snippet',
+                    [
+                        'id'         => implode(',', $ids),
+                        'maxResults' => 50,
+                        'pageToken'  => $nextPageToken,
+                    ],
+                );
+                foreach ($response->getItems() as $item) {
+                    $videoSnippet = $item->getSnippet();
+                    $videos->add(
+                        new VideoItem(
+                            $item->getId(),
                             $videoSnippet->getTitle(),
                             $videoSnippet->getDescription(),
                             $videoSnippet->getThumbnails()

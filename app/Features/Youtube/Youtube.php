@@ -21,7 +21,7 @@ abstract class Youtube
         $this->channelRepo = $channelRepo;
     }
 
-    protected function accessTokenFromChannel(Channel $channel) : Tokens
+    protected function tokensOfChannel(Channel $channel) : Tokens
     {
         return new Tokens(
             $channel->access_token,

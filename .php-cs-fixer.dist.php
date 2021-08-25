@@ -91,7 +91,7 @@ return (new PhpCsFixer\Config())
         'object_operator_without_whitespace' => true,
         'ordered_class_elements' => false,
         'ordered_imports' => true,
-        'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
+        'phpdoc_add_missing_param_annotation' => ['only_untyped' => true],
         'phpdoc_align' => ['align' => 'left'],
         'phpdoc_annotation_without_dot' => true,
         'phpdoc_indent' => true,

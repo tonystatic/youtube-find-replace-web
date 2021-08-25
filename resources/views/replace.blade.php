@@ -1,8 +1,8 @@
-@extends('layouts.base')
+@extends('layouts.app')
 
 @php
     /* @var \App\Models\Channel $channel */
-    /* @var \App\Features\Youtube\Support\VideoItems $videos */
+    /* @var \App\Features\Youtube\Support\FilteredVideos $videos */
 @endphp
 
 @section('title', 'Find & Replace for YouTube')
@@ -26,26 +26,28 @@
                 </div>
             </div>
             <div class="col-xxl-10 col-lg-9 col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="{{ route('findReplace.replace') }}" method="post">
-                            {!! csrf_field() !!}
-                            @if ($videos->isNotEmpty())
-                                <ul class="list-group">
-                                    @foreach ($videos->all() as $video)
-                                        <li class="list-group-item">
-                                            <input name="videos[]" value="{{ $video->getId() }}" class="form-check-input me-1" type="checkbox" aria-label="...">
-                                            {{ $video->getTitle() }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                                <button type="submit" class="btn btn-primary">Replace</button>
-                            @else
-                                <a href="{{ route('findReplace') }}" class="btn btn-primary">Search again</a>
-                            @endif
-                        </form>
-                    </div>
-                </div>
+{{--                <div class="card">--}}
+{{--                    <div class="card-body">--}}
+{{--                        --}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                <form action="{{ route('findReplace.replace') }}" method="post">
+                    {!! csrf_field() !!}
+                    @if ($videos->isNotEmpty())
+                        <button type="submit" class="btn btn-primary">Replace</button>
+                        <ul class="list-group">
+                            @foreach ($videos->all() as $video)
+                                <li class="list-group-item">
+                                    <input name="videos[]" value="{{ $video->attributes()->getId() }}" class="form-check-input me-1" type="checkbox" aria-label="...">
+                                    {{ $video->attributes()->getTitle() }}
+                                </li>
+                            @endforeach
+                        </ul>
+                        <button type="submit" class="btn btn-primary">Replace</button>
+                    @else
+                        <a href="{{ route('findReplace') }}" class="btn btn-primary">Search again</a>
+                    @endif
+                </form>
             </div>
         </div>
     </div>

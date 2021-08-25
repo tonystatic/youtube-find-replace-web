@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
-use App\Http\Controllers\FindReplaceController;
+use App\Http\Controllers\ToolsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,10 +28,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::group(['prefix' => 'find-replace'], function () {
-
-        Route::get('/',        [FindReplaceController::class, 'index'])->name('findReplace');
-        Route::post('search',  [FindReplaceController::class, 'search'])->name('findReplace.search');
-        Route::post('replace', [FindReplaceController::class, 'replace'])->name('findReplace.replace');
-    });
+    Route::get('find-replace', [ToolsController::class, 'findReplace'])->name('findReplace');
 });

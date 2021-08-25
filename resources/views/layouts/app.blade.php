@@ -6,6 +6,7 @@
             @yield('title') | {{ config('app.name') }}
         </title>
         <link href="{{ mix('assets/css/app.css') }}" rel="stylesheet" type="text/css" media="screen" />
+        @livewireStyles
         @stack('head')
     </head>
     <body itemscope itemtype="http://schema.org/WebPage">
@@ -15,6 +16,7 @@
             @yield('content')
         </main>
         <script src="{{ mix('assets/js/app.js') }}" type="text/javascript"></script>
+        @livewireScripts
         @stack('body-bottom')
     </body>
 </html>

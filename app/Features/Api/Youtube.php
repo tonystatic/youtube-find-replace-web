@@ -28,4 +28,10 @@ interface Youtube
      * @throws \App\Features\Api\Support\ApiRequestException
      */
     public function getVideos(Tokens &$tokens, string $uploadsPlaylistId) : VideoItems;
+
+    /**
+     * @throws \App\Features\Api\Support\ApiAuthExpiredException
+     * @throws \App\Features\Api\Support\ApiRequestException
+     */
+    public function getVideosByIds(Tokens &$tokens, array $ids) : VideoItems;
 }
