@@ -7,12 +7,15 @@ namespace App\Features\Api\GoogleApi;
 use App\Features\Api\Support\ApiAuthException;
 use App\Features\Api\Support\ApiRequestException;
 use App\Features\Api\Support\ChannelInfo;
+use App\Features\Api\Support\FullVideoItem;
+use App\Features\Api\Support\ShortVideoItem;
 use App\Features\Api\Support\Tokens;
-use App\Features\Api\Support\VideoItem;
 use App\Features\Api\Support\VideoItems;
 use App\Features\Api\Youtube;
 use Exception;
 use Google_Service_YouTube;
+use Google_Service_YouTube_Video;
+use Google_Service_YouTube_VideoSnippet;
 
 class GoogleApiYoutube extends GoogleApi implements Youtube
 {
@@ -85,7 +88,7 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
                 foreach ($response->getItems() as $item) {
                     $videoSnippet = $item->getSnippet();
                     $videos->add(
-                        new VideoItem(
+                        new ShortVideoItem(
                             $videoSnippet->getResourceId()->getVideoId(),
                             $videoSnippet->getTitle(),
                             $videoSnippet->getDescription(),
@@ -124,13 +127,17 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
                 foreach ($response->getItems() as $item) {
                     $videoSnippet = $item->getSnippet();
                     $videos->add(
-                        new VideoItem(
+                        new FullVideoItem(
                             $item->getId(),
                             $videoSnippet->getTitle(),
                             $videoSnippet->getDescription(),
                             $videoSnippet->getThumbnails()
                                 ->getMedium()
-                                ->getUrl()
+                                ->getUrl(),
+                            (array) $videoSnippet->getTags(),
+                            $videoSnippet->getCategoryId(),
+                            $videoSnippet->getDefaultLanguage(),
+                            $videoSnippet->getDefaultAudioLanguage()
                         )
                     );
                 }
@@ -141,5 +148,33 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
         }
 
         return $videos;
+    }
+
+    public function update(Tokens &$tokens, FullVideoItem $video) : void
+    {
+        $this->setTokensAndRefreshIfNeeded($tokens);
+
+        $youtubeService = new Google_Service_YouTube($this->client);
+
+        try {
+            $videoSnippetResource = new Google_Service_YouTube_VideoSnippet();
+            $videoSnippetResource->setTitle($video->getTitle());
+            $videoSnippetResource->setDescription($video->getDescription());
+            $videoSnippetResource->setTags($video->getTags());
+            $videoSnippetResource->setCategoryId($video->getCategoryId());
+            $videoSnippetResource->setDefaultLanguage($video->getDefaultLanguage());
+            $videoSnippetResource->setDefaultAudioLanguage($video->getDefaultAudioLanguage());
+
+            $videoResource = new Google_Service_YouTube_Video();
+            $videoResource->setId($video->getId());
+            $videoResource->setSnippet($videoSnippetResource);
+
+            $youtubeService->videos->update(
+                'snippet',
+                $videoResource,
+            );
+        } catch (Exception $e) {
+            throw new ApiRequestException($e);
+        }
     }
 }

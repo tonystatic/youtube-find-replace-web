@@ -6,7 +6,7 @@ namespace App\Features\Api\Support;
 
 class VideoItems
 {
-    /* @var \App\Features\Api\Support\VideoItem[]|array */
+    /* @var \App\Features\Api\Support\ShortVideoItem[]|\App\Features\Api\Support\FullVideoItem[]|array */
     protected array $items;
 
     public function __construct()
@@ -14,18 +14,18 @@ class VideoItems
         $this->items = [];
     }
 
-    public function add(VideoItem $videoItem) : void
+    public function add(ShortVideoItem | FullVideoItem $videoItem) : void
     {
         $this->items[$videoItem->getId()] = $videoItem;
     }
 
-    public function getById(string $id) : ?VideoItem
+    public function getById(string $id) : ShortVideoItem | FullVideoItem | null
     {
         return $this->items[$id] ?? null;
     }
 
     /**
-     * @return \App\Features\Api\Support\VideoItem[]|array
+     * @return \App\Features\Api\Support\FullVideoItem[]|\App\Features\Api\Support\ShortVideoItem[]|array
      */
     public function all() : array
     {

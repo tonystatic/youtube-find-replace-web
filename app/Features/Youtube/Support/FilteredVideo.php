@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace App\Features\Youtube\Support;
 
-use App\Features\Api\Support\VideoItem;
+use App\Features\Api\Support\FullVideoItem;
+use App\Features\Api\Support\ShortVideoItem;
 
 class FilteredVideo
 {
-    protected VideoItem $video;
+    protected ShortVideoItem | FullVideoItem $video;
 
     protected bool $inTitle;
 
     protected bool $inDescription;
 
-    public function __construct(VideoItem $video, bool $inTitle, bool $inDescription)
+    public function __construct(ShortVideoItem | FullVideoItem $video, bool $inTitle, bool $inDescription)
     {
         $this->video = $video;
         $this->inTitle = $inTitle;
         $this->inDescription = $inDescription;
     }
 
-    public function attributes() : VideoItem
+    public function attributes() : ShortVideoItem | FullVideoItem
     {
         return $this->video;
     }

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Features\Api\Support;
 
-class VideoItem
+class ShortVideoItem
 {
     protected string $id;
 
     protected string $title;
 
-    protected string $description;
+    protected ?string $description;
 
     protected string $cover;
 
-    public function __construct(string $id, string $title, string $description, string $cover)
+    public function __construct(string $id, string $title, ?string $description, string $cover)
     {
         $this->id = $id;
         $this->title = $title;
@@ -32,7 +32,7 @@ class VideoItem
         return $this->title;
     }
 
-    public function getDescription() : string
+    public function getDescription() : ?string
     {
         return $this->description;
     }
@@ -58,5 +58,19 @@ class VideoItem
         $this->title = $data['title'];
         $this->description = $data['description'];
         $this->cover = $data['cover'];
+    }
+
+    public function setTitle(string $title) : ShortVideoItem
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function setDescription(?string $description) : ShortVideoItem
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

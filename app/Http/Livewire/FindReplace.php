@@ -6,6 +6,7 @@ namespace App\Http\Livewire;
 
 use App\Features\Youtube\Support\RequestException;
 use App\Features\Youtube\Videos;
+use App\Http\Support\GetsChannel;
 use Crypt;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -29,6 +30,8 @@ class FindReplace extends Component
 
     public array $selectedVideos;
 
+    public int $updatedCount;
+
     public function mount() : void
     {
         $this->step = 'search';
@@ -39,6 +42,8 @@ class FindReplace extends Component
         $this->searchInDescriptions = true;
 
         $this->selectedVideos = [];
+
+        $this->updatedCount = 0;
     }
 
     public function render() : View
@@ -113,10 +118,12 @@ class FindReplace extends Component
         $channel = $this->getChannel();
 
         $this->validate([
-            'selectedVideos'   => 'nullable|array',
+            'selectedVideos'   => 'required|array|min:1',
             'selectedVideos.*' => 'string',
         ], [
+            'selectedVideos.required' => 'You should select at least one video.',
             'selectedVideos.array'    => 'Selected videos must be an array.',
+            'selectedVideos.min'      => 'You should select at least one video.',
             'selectedVideos.*.string' => 'Video ID has invalid format.',
         ]);
 
@@ -128,13 +135,14 @@ class FindReplace extends Component
             $searchIn[] = Videos::SEARCH_IN_DESCRIPTIONS;
         }
         try {
-            $videosCount = $videos->replace($channel, $this->selectedVideos, $this->search, $this->replace, $searchIn);
+            $updatedCount = $videos->replace($channel, $this->selectedVideos, $this->search, $this->replace, $searchIn);
         } catch (RequestException $e) {
             flash()->error($e->getMessage());
 
             return;
         }
 
+        $this->updatedCount = $updatedCount;
         $this->step = 'success';
     }
 }

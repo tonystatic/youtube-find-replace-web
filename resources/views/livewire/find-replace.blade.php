@@ -1,5 +1,6 @@
 @php
     /* @var string $step */
+    /* @var int $updatedCount */
     /* @var \App\Features\Youtube\Support\FilteredVideos|null $videos */
 @endphp
 
@@ -35,7 +36,7 @@
         <form wire:submit.prevent="submitReplace" action="#" method="post">
             @if ($videos->isNotEmpty())
                 <button wire:loading.attr="disabled" wire:target="submitReplace" type="submit" class="btn btn-primary">Replace</button>
-                <ul class="list-group">
+                <ul class="list-group mb-3 mt-3" style="max-height: 800px; overflow-y:auto; -webkit-overflow-scrolling: touch;">
                     @foreach ($videos->all() as $video)
                         <li class="list-group-item">
                             <input wire:model="selectedVideos" wire:loading.attr="disabled" wire:target="submitReplace" name="videos[]" value="{{ $video->attributes()->getId() }}" class="form-check-input me-1" type="checkbox" aria-label="...">
@@ -48,5 +49,12 @@
                 <a href="{{ route('findReplace') }}" class="btn btn-primary">Search again</a>
             @endif
         </form>
+    @elseif ($step === 'success')
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3">Videos successfully updated: {{ $updatedCount }}.</div>
+                <a href="{{ route('findReplace') }}" class="btn btn-primary">Search again</a>
+            </div>
+        </div>
     @endif
 </div>

@@ -94,12 +94,37 @@ class Videos extends Youtube
 
         $filteredVideos = $this->filter($videos, $search, $in);
 
-        dd($filteredVideos);
-
+        $updatedCount = 0;
+        $errorsCount = 0;
         foreach ($filteredVideos->all() as $filteredVideo) {
-            // TODO: Implement video update
+            /* @var \App\Features\Api\Support\FullVideoItem $video */
+            $video = $filteredVideo->attributes();
+            if ($filteredVideo->inTitle()) {
+                $video = $video->setTitle(
+                    str_replace($search, $replace, $video->getTitle())
+                );
+            }
+            if ($filteredVideo->inDescription()) {
+                $video = $video->setDescription(
+                    str_replace($search, $replace, $video->getDescription())
+                );
+            }
+            try {
+                $this->api->update($tokens, $video);
+            } catch (ApiRequestException $e) {
+                dd($e);
+                ++$errorsCount;
+                continue;
+            } catch (ApiAuthExpiredException $e) {
+                dd($e);
+
+                throw new AuthExpiredException($e);
+            }
+            ++$updatedCount;
         }
 
         $this->updateChannelTokens($channel, $tokens);
+
+        return $updatedCount;
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Features\Api;
 
 use App\Features\Api\Support\ChannelInfo;
+use App\Features\Api\Support\FullVideoItem;
 use App\Features\Api\Support\Tokens;
 use App\Features\Api\Support\VideoItems;
 
@@ -34,4 +35,10 @@ interface Youtube
      * @throws \App\Features\Api\Support\ApiRequestException
      */
     public function getVideosByIds(Tokens &$tokens, array $ids) : VideoItems;
+
+    /**
+     * @throws \App\Features\Api\Support\ApiAuthExpiredException
+     * @throws \App\Features\Api\Support\ApiRequestException
+     */
+    public function update(Tokens &$tokens, FullVideoItem $video) : void;
 }
