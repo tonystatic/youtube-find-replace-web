@@ -27,6 +27,11 @@ class FilteredVideos
         return $this->items;
     }
 
+    public function allIds() : array
+    {
+        return array_keys($this->items);
+    }
+
     public function isEmpty() : bool
     {
         return empty($this->items);

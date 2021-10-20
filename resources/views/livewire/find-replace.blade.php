@@ -36,6 +36,10 @@
         <form wire:submit.prevent="submitReplace" action="#" method="post">
             @if ($videos->isNotEmpty())
                 <button wire:loading.attr="disabled" wire:target="submitReplace" type="submit" class="btn btn-primary">Replace</button>
+                <div class="float-end">
+                    <button wire:click="selectAll" type="button" class="btn btn-outline-info me-2">Select all</button>
+                    <button wire:click="deselectAll" type="button" class="btn btn-outline-warning">Deselect all</button>
+                </div>
                 <ul class="list-group mb-3 mt-3" style="max-height: 800px; overflow-y:auto; -webkit-overflow-scrolling: touch;">
                     @foreach ($videos->all() as $video)
                         <li class="list-group-item">
@@ -45,6 +49,10 @@
                     @endforeach
                 </ul>
                 <button wire:loading.attr="disabled" wire:target="submitReplace" type="submit" class="btn btn-primary">Replace</button>
+                <div class="float-end">
+                    <button wire:click="selectAll" type="button" class="btn btn-outline-info me-2">Select all</button>
+                    <button wire:click="deselectAll" type="button" class="btn btn-outline-warning">Deselect all</button>
+                </div>
             @else
                 <a href="{{ route('findReplace') }}" class="btn btn-primary">Search again</a>
             @endif

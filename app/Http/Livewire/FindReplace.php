@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
+use App\Features\Youtube\Support\FilteredVideos;
 use App\Features\Youtube\Support\RequestException;
 use App\Features\Youtube\Videos;
 use App\Http\Support\GetsChannel;
@@ -49,10 +50,15 @@ class FindReplace extends Component
     public function render() : View
     {
         return view('livewire.find-replace', [
-            'videos' => $this->serializedVideos !== null
-                ? Crypt::decrypt($this->serializedVideos)
-                : null,
+            'videos' => $this->deserializedVideos(),
         ]);
+    }
+
+    protected function deserializedVideos() : ?FilteredVideos
+    {
+        return $this->serializedVideos !== null
+            ? Crypt::decrypt($this->serializedVideos)
+            : null;
     }
 
     public function updatingSearchInTitles(bool $value) : void
@@ -138,11 +144,25 @@ class FindReplace extends Component
             $updatedCount = $videos->replace($channel, $this->selectedVideos, $this->search, $this->replace, $searchIn);
         } catch (RequestException $e) {
             flash()->error($e->getMessage());
+            dd($e);
 
             return;
         }
 
         $this->updatedCount = $updatedCount;
         $this->step = 'success';
+    }
+
+    public function selectAll() : void
+    {
+        $videos = $this->deserializedVideos();
+        $this->selectedVideos = $videos !== null
+            ? $videos->allIds()
+            : [];
+    }
+
+    public function deselectAll() : void
+    {
+        $this->selectedVideos = [];
     }
 }

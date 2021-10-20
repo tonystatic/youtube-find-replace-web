@@ -115,34 +115,36 @@ class GoogleApiYoutube extends GoogleApi implements Youtube
         $videos = new VideoItems();
         $nextPageToken = null;
         try {
-            do {
-                $response = $youtubeService->videos->listVideos(
-                    'snippet',
-                    [
-                        'id'         => implode(',', $ids),
-                        'maxResults' => 50,
-                        'pageToken'  => $nextPageToken,
-                    ],
-                );
-                foreach ($response->getItems() as $item) {
-                    $videoSnippet = $item->getSnippet();
-                    $videos->add(
-                        new FullVideoItem(
-                            $item->getId(),
-                            $videoSnippet->getTitle(),
-                            $videoSnippet->getDescription(),
-                            $videoSnippet->getThumbnails()
-                                ->getMedium()
-                                ->getUrl(),
-                            (array) $videoSnippet->getTags(),
-                            $videoSnippet->getCategoryId(),
-                            $videoSnippet->getDefaultLanguage(),
-                            $videoSnippet->getDefaultAudioLanguage()
-                        )
+            foreach (array_chunk($ids, 50) as $idsChunk) {
+                do {
+                    $response = $youtubeService->videos->listVideos(
+                        'snippet',
+                        [
+                            'id'         => implode(',', $idsChunk),
+                            'maxResults' => 50,
+                            'pageToken'  => $nextPageToken,
+                        ],
                     );
-                }
-                $nextPageToken = $response->getNextPageToken();
-            } while ($nextPageToken !== null);
+                    foreach ($response->getItems() as $item) {
+                        $videoSnippet = $item->getSnippet();
+                        $videos->add(
+                            new FullVideoItem(
+                                $item->getId(),
+                                $videoSnippet->getTitle(),
+                                $videoSnippet->getDescription(),
+                                $videoSnippet->getThumbnails()
+                                    ->getMedium()
+                                    ->getUrl(),
+                                (array) $videoSnippet->getTags(),
+                                $videoSnippet->getCategoryId(),
+                                $videoSnippet->getDefaultLanguage(),
+                                $videoSnippet->getDefaultAudioLanguage()
+                            )
+                        );
+                    }
+                    $nextPageToken = $response->getNextPageToken();
+                } while ($nextPageToken !== null);
+            }
         } catch (Exception $e) {
             throw new ApiRequestException($e);
         }
